@@ -4,11 +4,7 @@ import { parseArgs } from "node:util";
 import fs from "node:fs";
 import path from "node:path";
 
-// import { getTransformer } from "./lib/transformer.mts";
-// import { getFilter } from "./lib/filter.mts";
-// import { processItems } from "./lib/processor.mts";
-// import { showHelp } from "./lib/help.mts";
-import { getTransformer, getFilter, showHelp, processItems } from "./lib/index.mts";
+import { getTransformer, getFilter, showHelp, processItems } from "@/lib/index.mts";
 
 const main = async (): Promise<void> => {
   const rawArgs = process.argv.slice(2);

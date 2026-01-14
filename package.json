@@ -2,10 +2,22 @@
   "name": "file-frenzy",
   "version": "0.1.0",
   "description": "File and folder rename script",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    "imports": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "require": {
+      "types": "./dist/index.d.cts",
+      "default": "./dist/index.cjs"
+    }
+  },
   "type": "module",
   "scripts": {
     "start": "echo \"Hello world\"",
-    "build": "deno bundle src/index.mts -o dist/index.mjs"
+    "build": "tsdown"
   },
   "author": {
     "name": "José Martínez Santana"
@@ -18,11 +30,12 @@
     "url": "https://github.com/MetalbolicX/file-frenzy/issues"
   },
   "files": [
-    "src"
+    "dist"
   ],
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^25.0.8",
+    "tsdown": "0.20.0-beta.2",
     "typescript": "^5.9.3"
   }
 }
