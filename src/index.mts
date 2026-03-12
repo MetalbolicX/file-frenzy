@@ -1,23 +1,25 @@
 #!/usr/bin/env node
 
 import { parseArgs } from "node:util";
-import fs from "node:fs";
-import path from "node:path";
+import { promises } from "node:fs";
+import { showHelp, showExamples } from "./utils/index.mts";
+import { renameCommand, type RenameOptions } from "./core/main.mts";
 
-import { getTransformer, getFilter, showHelp } from "@/utils/index.mts";
-import { processItems } from "@/core/index.mts";
-
+/**
+ * Main command line execution runtime.
+ * Parses arguments and delegates the renaming logic to the programmatic API.
+ * @returns {Promise<void>} Resolves when the CLI execution finishes.
+ */
 const main = async (): Promise<void> => {
   const rawArgs = process.argv.slice(2);
-  if (rawArgs.includes("--help") || rawArgs.includes("-h")) {
-    console.log(showHelp());
-    return;
-  }
 
-  const { values, positionals } = parseArgs({
+  const { values } = parseArgs({
     args: rawArgs,
-    allowPositionals: true,
+    allowPositionals: false,
     options: {
+      help: { type: "boolean", short: "h" },
+      example: { type: "boolean", short: "e" },
+      directory: { type: "string", short: "d" },
       filter: { type: "string", short: "f" },
       type: { type: "string", short: "t" },
       pattern: { type: "string", short: "p" },
@@ -27,53 +29,51 @@ const main = async (): Promise<void> => {
     },
   });
 
-  // widen types so we can safely access unknown properties and positionals
-  const vals = values as Record<string, any>;
-  const pos = positionals as string[];
-
-  const target = (pos && pos[0]) || vals.path || vals._?.[0];
-  if (!target) {
-    console.log(
-      "Usage: node index.mjs <path> [--filter|-f <regex>] [--type|-t file|dir|both] [--pattern|-p <regex>] [--replace|-r <text>] [--strip|-s <chars>] [--dry-run]"
-    );
+  // 1. Handle Help Flag
+  if (values.help) {
     console.log(showHelp());
     return;
   }
 
-  const targetPath = String(target);
+  // 2. Handle Example Flag
+  if (values.example) {
+    console.log(showExamples());
+    return;
+  }
+
+  // 3. Handle Missing Directory
+  if (!values.directory) {
+    console.error("Error: The --directory (-d) flag is required.\n");
+    console.log(showHelp());
+    return;
+  }
+
+  const targetPath = String(values.directory);
+
   try {
-    const stat = await fs.promises.stat(targetPath);
+    const stat = await promises.stat(targetPath);
     if (!stat.isDirectory()) {
       console.error(`Path not a directory: ${targetPath}`);
       return;
     }
-  } catch (e) {
+  } catch {
     console.error(`Path not found: ${targetPath}`);
     return;
   }
 
-  const itemType = (values.type as string) || "both";
-  const nameFilter = values.filter as string | undefined;
-  const transformFunc = getTransformer(
-    values.pattern as string | undefined,
-    (values.replace as string) || "",
-    values.strip as string | undefined
-  );
-  const filterFunc = getFilter(itemType, nameFilter);
-  const dryRun = Boolean(values["dry-run"]);
+  const options: RenameOptions = {
+    type: values.type as string | undefined,
+    filter: values.filter as string | undefined,
+    pattern: values.pattern as string | undefined,
+    replace: values.replace as string | undefined,
+    strip: values.strip as string | undefined,
+    dryRun: Boolean(values["dry-run"]),
+  };
 
-  const dirents = await fs.promises.readdir(targetPath, {
-    withFileTypes: true,
-  });
-  const items = dirents.map((d) => ({
-    fullPath: path.join(targetPath, d.name),
-    dirent: d,
-  }));
-
-  await processItems(items, filterFunc, transformFunc, dryRun);
+  await renameCommand(targetPath, options);
 };
 
-main().catch((err) => {
+if (import.meta.main) main().catch((err) => {
   console.error(err);
   process.exitCode = 1;
 });
