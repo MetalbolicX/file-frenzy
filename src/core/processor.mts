@@ -1,5 +1,5 @@
-import fs from "node:fs";
-import path from "node:path";
+import  { type Dirent, promises } from "node:fs";
+import { dirname, join } from "node:path";
 
 /**
  * Asynchronously processes a list of filesystem entries and optionally renames them.
@@ -30,8 +30,8 @@ import path from "node:path";
  * await processItems(items, (p, d) => d.isFile(), name => name.toLowerCase(), true);
  */
 export const processItems = async (
-  items: Array<{ fullPath: string; dirent: fs.Dirent }> ,
-  filterFunc: (fullPath: string, dirent: fs.Dirent) => boolean,
+  items: Array<{ fullPath: string; dirent: Dirent }> ,
+  filterFunc: (fullPath: string, dirent: Dirent) => boolean,
   transformFunc: (name: string) => string,
   dryRun = false
 ): Promise<void> => {
@@ -42,8 +42,8 @@ export const processItems = async (
     const newName = transformFunc(oldName);
     if (newName === oldName) continue;
 
-    const dir = path.dirname(fullPath);
-    const newPath = path.join(dir, newName);
+    const dir = dirname(fullPath);
+    const newPath = join(dir, newName);
 
     if (dryRun) {
       console.log(`[DRY RUN] Would rename: ${oldName} -> ${newName}`);
@@ -51,7 +51,7 @@ export const processItems = async (
     }
 
     try {
-      await fs.promises.rename(fullPath, newPath);
+      await promises.rename(fullPath, newPath);
       console.log(`Renamed: ${oldName} -> ${newName}`);
     } catch (err: any) {
       console.error(`Error renaming ${oldName}: ${err?.message ?? err}`);
