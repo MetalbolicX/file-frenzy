@@ -7,7 +7,7 @@ import type { Dirent } from "node:fs";
  * @returns A predicate function with signature (fullPath: string, dirent: Dirent) => boolean.
  */
 export const getFilter = (itemType: string, nameFilter?: string) => (
-  fullPath: string,
+  _fullPath: string,
   dirent: Dirent
 ): boolean => {
 const typeMatch = itemType === "file"
