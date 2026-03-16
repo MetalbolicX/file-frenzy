@@ -7,7 +7,7 @@ let processItems: (
   let promises = items->Array.map(async item => {
     let {fullPath, dirent} = item
     if filterFunc(dirent) {
-      let oldName = dirent.name
+      let {name: oldName} = dirent
       let newName = transformFunc(oldName)
 
       if newName !== oldName {
