@@ -1,13 +1,3 @@
-// type renameOptions = {
-//   @as("type") type_?: string,
-//   filter?: string,
-//   pattern?: string,
-//   replace?: string,
-//   strip?: string,
-//   dryRun?: bool,
-// }
-
-// --- Main Execution ---
 let main: unit => promise<unit> = async () => {
   let config = {
     "args": Bindings.argv->Array.slice(~start=2, ~end=Array.length(Bindings.argv)),

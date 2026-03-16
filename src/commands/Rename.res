@@ -20,10 +20,8 @@ let execCommand: (string, renameOptions) => promise<unit> = async (targetPath, o
   // Initialize helper functions from your utility modules
   let filterFunc = Predicate.getFilter(itemType, ~nameFilter=?options.filter)
   let transformFunc = Transformer.getTransformer(
-    // ~pattern=?options.pattern,
     ~pattern=options.pattern,
     ~replacement=replace,
-    // ~strip=?options.strip,
     ~strip=options.strip,
   )
 
