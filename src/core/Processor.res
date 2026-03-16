@@ -1,12 +1,12 @@
 let processItems: (
   array<Bindings.fileItem>,
-  (string, Bindings.dirent) => bool,
+  Bindings.dirent => bool,
   string => string,
-  ~dryRun: bool=?,
-) => promise<unit> = async (items, filterFunc, transformFunc, ~dryRun=false) => {
+  ~isDryRun: bool=?,
+) => promise<unit> = async (items, filterFunc, transformFunc, ~isDryRun=false) => {
   let promises = items->Array.map(async item => {
     let {fullPath, dirent} = item
-    if filterFunc(fullPath, dirent) {
+    if filterFunc(dirent) {
       let oldName = dirent.name
       let newName = transformFunc(oldName)
 
@@ -14,7 +14,7 @@ let processItems: (
         let dir = Bindings.dirname(fullPath)
         let newPath = Bindings.join([dir, newName])
 
-        if dryRun {
+        if isDryRun {
           Console.log(`[DRY RUN] Would rename: ${oldName} -> ${newName}`)
         } else {
           try {

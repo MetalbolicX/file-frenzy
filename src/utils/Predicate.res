@@ -1,8 +1,8 @@
-let getFilter: (string, ~nameFilter: string=?) => (string, Bindings.dirent) => bool = (
+let getFilter: (string, ~nameFilter: string=?) => Bindings.dirent => bool = (
   itemType,
   ~nameFilter=?,
 ) =>
-  (_fullPath, dirent) => {
+  dirent => {
     let typeMatch = switch itemType {
     | "file" => dirent.isFile()
     | "dir" => dirent.isDirectory()

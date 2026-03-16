@@ -15,7 +15,7 @@ let execCommand: (string, renameOptions) => promise<unit> = async (targetPath, o
   // Extract options with defaults
   let itemType = options.type_->Option.getOr("both")
   let replace = options.replace->Option.getOr("")
-  let dryRun = options.dryRun->Option.getOr(false)
+  let isDryRun = options.dryRun->Option.getOr(false)
 
   // Initialize helper functions from your utility modules
   let filterFunc = Predicate.getFilter(itemType, ~nameFilter=?options.filter)
@@ -37,5 +37,5 @@ let execCommand: (string, renameOptions) => promise<unit> = async (targetPath, o
   })
 
   // // Execute the process
-  await Processor.processItems(items, filterFunc, transformFunc, ~dryRun)
+  await Processor.processItems(items, filterFunc, transformFunc, ~isDryRun)
 }
