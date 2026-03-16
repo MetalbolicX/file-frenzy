@@ -7,7 +7,6 @@
 1. Rename files and folders in bulk.
 2. Customizable renaming patterns.
 3. Preview changes before applying them.
-4. Script build with vanilla TypeScript for node.js environment.
 
 ## 🚀 Quick Installation
 
