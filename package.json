@@ -2,27 +2,18 @@
   "name": "file-frenzy",
   "version": "1.0.0",
   "description": "File and folder rename script",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.mts",
-  "main": "./dist/index.mjs",
+  "module": "./src/Main.mjs",
+  "main": "./src/Main.mjs",
   "exports": {
     "imports": {
-      "types": "./dist/index.d.mts",
-      "default": "./dist/index.mjs"
-    },
-    "require": {
-      "types": "./dist/index.d.cts",
-      "default": "./dist/index.cjs"
+      "default": "./src/Main.mjs"
     }
   },
   "type": "module",
   "scripts": {
-    "start": "echo \"Hello world\"",
-    "build": "tsdown",
     "res:build": "rescript",
     "res:dev": "rescript watch",
-    "res:clean": "rescript clean",
-    "rolldown:build": "rolldown -c"
+    "res:clean": "rescript clean"
   },
   "author": {
     "name": "José Martínez Santana"
@@ -35,17 +26,18 @@
     "url": "https://github.com/MetalbolicX/file-frenzy/issues"
   },
   "files": [
-    "dist"
+    "src/**/*.mjs"
   ],
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^25.5.0",
-    "rolldown": "1.0.0-rc.9",
-    "tsdown": "0.20.0-beta.2",
     "typescript": "^5.9.3"
   },
   "dependencies": {
     "@rescript/runtime": "^12.2.0",
     "rescript": "^12.2.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   }
 }
