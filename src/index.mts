@@ -1,9 +1,8 @@
 #!/usr/bin/env node
-
 import { parseArgs } from "node:util";
 import { promises } from "node:fs";
 import { showHelp, showExamples } from "./utils/index.mts";
-import { renameCommand, type RenameOptions } from "./core/main.mts";
+import { renameCommand, type RenameOptions } from "./commands/index.mts";
 
 /**
  * Main command line execution runtime.
@@ -11,10 +10,9 @@ import { renameCommand, type RenameOptions } from "./core/main.mts";
  * @returns {Promise<void>} Resolves when the CLI execution finishes.
  */
 const main = async (): Promise<void> => {
-  const rawArgs = process.argv.slice(2);
 
   const { values } = parseArgs({
-    args: rawArgs,
+    args: process.argv.slice(2),
     allowPositionals: false,
     options: {
       help: { type: "boolean", short: "h" },
