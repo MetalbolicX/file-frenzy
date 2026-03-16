@@ -1,4 +1,3 @@
-// //--- Types---
 type renameOptions = {
   @as("type") type_?: string,
   filter?: string,
@@ -9,7 +8,14 @@ type renameOptions = {
 }
 
 /**
- * Programmatically accesses a directory and processes item names based on provided logic.
+ * Renames files in a directory based on the provided options.
+ * @param targetPath - The path of the directory to process
+ * @param options - The options for renaming
+ * @returns A promise that resolves when all items have been processed
+ * @example
+ * ```
+ * await execCommand("path/to/dir", {type_: "file", filter: ".*\\.js", replace: ".ts"})
+ * ```
  */
 let execCommand: (string, renameOptions) => promise<unit> = async (targetPath, options) => {
   // Extract options with defaults

@@ -1,3 +1,6 @@
+/**
+ * The main entry point for the file-frenzy CLI application.
+ */
 let main: unit => promise<unit> = async () => {
   let config = {
     "args": Bindings.argv->Array.slice(~start=2, ~end=Array.length(Bindings.argv)),
